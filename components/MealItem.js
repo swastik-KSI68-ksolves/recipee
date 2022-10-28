@@ -1,21 +1,32 @@
+import { useNavigation } from "@react-navigation/native";
 import { Image, Pressable, StyleSheet, Text, View, Platform } from "react-native"
+import MealDetailsMaker from "./MealDetailsMaker";
 
-const MealItem = ({ title, imageUrl, duration, complexity, affordability }) => {
+const MealItem = ({ id, title, imageUrl, duration, complexity, affordability }) => {
+
+    const navigation = useNavigation();
+
+    const selectMealItemHandler = () => {
+        navigation.navigate('MealDetails', {
+            mealId: id,
+        })
+    }
+
     return (
         <View style={styles.upperContainer}>
             <Pressable
                 android_ripple={{ color: "#ccc" }}
-
+                onPress={selectMealItemHandler}
             >
                 <View>
                     <Image style={styles.image} source={{ uri: imageUrl }} />
                     <Text style={styles.title}>{title}</Text>
                 </View>
-                <View style={styles.details}>
-                    <Text style={styles.detailItems}>{duration}</Text>
-                    <Text style={styles.detailItems}>{complexity.toUpperCase()}</Text>
-                    <Text style={styles.detailItems}>{affordability.toUpperCase()}</Text>
-                </View>
+                <MealDetailsMaker
+                    affordability={affordability}
+                    complexity={complexity}
+                    duration={duration}
+                />
             </Pressable>
         </View>
     )
@@ -26,7 +37,7 @@ export default MealItem
 const styles = StyleSheet.create({
     image: {
         width: "100%",
-        height: 200
+        height: 200,
     },
     title: {
         fontWeight: "bold",
